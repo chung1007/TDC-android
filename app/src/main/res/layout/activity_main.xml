@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3380FF"
+    tools:context="com.pitch.davis.thedavisconnection.MainActivity">
+
+    <!--
+#33AFFF
+    -->
+
+    <TextView
+        android:id="@+id/Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TheDavisConnection"
+        android:textColor="#FFFFFF"
+        android:fontFamily="sans-serif-condensed"
+        android:layout_centerHorizontal="true"
+        android:textSize="37sp"
+        android:paddingTop="150dp"
+        android:textStyle="normal"/>
+    <RelativeLayout
+        android:id="@+id/loginLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Title"
+        android:alpha="0">
+
+        <EditText
+            android:id="@+id/nameInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:paddingTop="70dp"
+            android:textColor="#FFFFFF"
+            android:background="@null"
+            android:backgroundTint="#FFFFFF"
+            android:paddingLeft="20dp"
+            android:fontFamily="sans-serif-thin"
+            android:textSize="22sp"/>
+
+        <View
+            android:id="@+id/TextUnderBorder"
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="#FFFFFF"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_below="@+id/nameInput"/>
+
+        <EditText
+            android:id="@+id/phoneNumberInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email or Phone"
+            android:layout_below="@id/nameInput"
+            android:paddingTop="30dp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FFFFFF"
+            android:paddingLeft="20dp"
+            android:background="@null"
+            android:fontFamily="sans-serif-thin"
+            android:textSize="22sp"/>
+
+        <View
+            android:id="@+id/TextUnderBorder2"
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="#FFFFFF"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_below="@+id/phoneNumberInput"/>
+    </RelativeLayout>
+
+</RelativeLayout>
