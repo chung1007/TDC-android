@@ -1,11 +1,15 @@
 package com.pitch.davis.thedavisconnection;
 
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -13,16 +17,20 @@ import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     EditText nameInput;
     EditText emailOrPhoneInput;
-    Animation anm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        pref = getApplicationContext().getSharedPreferences("LoginInfo", MODE_PRIVATE);
+        editor = pref.edit();
         setUp();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -34,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkLogin(){
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("LoginInfo", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
         if (!pref.contains("Name")){
             Log.e("test", "1");
             animations();
@@ -44,15 +50,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setUp(){
+    public void nextClicked(View view){
+        if (nameInput.getText().toString().equals("") || emailOrPhoneInput.getText().toString().equals("")){
+            Toast toast = Toast.makeText(this,"Invalid Input", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }else{
+            editor.putString("Name",nameInput.getText().toString());
+            editor.putString("phoneOrEmail",emailOrPhoneInput.getText().toString());
+            editor.commit();
+        }
+    }
+
+    private void setUp(){
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
         nameInput = (EditText)findViewById(R.id.nameInput);
         emailOrPhoneInput = (EditText)findViewById(R.id.phoneNumberInput);
         nameInput.setFocusable(false);
         emailOrPhoneInput.setFocusable(false);
+        nameInput.setHintTextColor(Color.WHITE);
+        emailOrPhoneInput.setHintTextColor(Color.WHITE);
     }
-    public void animations(){
+    private void animations(){
         TextView title = (TextView)findViewById(R.id.Title);
         RelativeLayout layout = (RelativeLayout)findViewById(R.id.loginLayout);
         AlphaAnimation animation1 = new AlphaAnimation(0f, 1.0f);
