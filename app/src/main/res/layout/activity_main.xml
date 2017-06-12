@@ -89,4 +89,16 @@
             android:onClick="nextClicked"/>
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/MASTHEAD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="By P.I.T.C.H."
+        android:textStyle="italic"
+        android:paddingBottom="5dp"
+        android:textColor="#FFFFFF"
+        android:fontFamily="sans-serif"/>
+
 </RelativeLayout>
