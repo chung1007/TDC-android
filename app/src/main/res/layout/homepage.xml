@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F1F2F3">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appColor">
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TheDavisConnection"
+            android:textColor="#FFFFFF"
+            android:layout_centerInParent="true"
+            android:textSize="30sp"
+            android:fontFamily="sans-serif-condensed"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"/>
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#F7F7F7">
+
+        <ImageView
+            android:id="@+id/searchIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/searchicon"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="5dp"
+            android:layout_centerVertical="true"/>
+
+        <EditText
+            android:id="@+id/searchBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="Search"
+            android:layout_toRightOf="@id/searchIcon"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/post"
+            android:singleLine="true"
+            android:cursorVisible="false"/>
+
+        <ImageView
+            android:id="@+id/post"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:clickable="true"
+            android:onClick="postClicked"
+            android:src="@drawable/posticon"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="5dp"/>
+
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/TextUnderBorder"
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:background="#E1E1E1"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

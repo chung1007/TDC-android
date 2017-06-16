@@ -1,5 +1,6 @@
 package com.pitch.davis.thedavisconnection;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -47,18 +48,21 @@ public class MainActivity extends AppCompatActivity {
             animations();
             nameInput.setFocusableInTouchMode(true);
             emailOrPhoneInput.setFocusableInTouchMode(true);
+        }else{
+            Intent homepage = new Intent(this, Homepage.class);
+            startActivity(homepage);
         }
     }
 
     public void nextClicked(View view){
         if (nameInput.getText().toString().equals("") || emailOrPhoneInput.getText().toString().equals("")){
-            Toast toast = Toast.makeText(this,"Invalid Input", Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
+            Utils.makeToast(this, "Invalid Input");
         }else{
             editor.putString("Name",nameInput.getText().toString());
-            editor.putString("phoneOrEmail",emailOrPhoneInput.getText().toString());
+            editor.putString("phoneOrEmail", emailOrPhoneInput.getText().toString());
             editor.commit();
+            Intent homepage = new Intent(this, Homepage.class);
+            startActivity(homepage);
         }
     }
 
