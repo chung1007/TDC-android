@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             Utils.makeToast(this, "Invalid Input");
         }else{
             editor.putString("Name",nameInput.getText().toString());
-            editor.putString("phoneOrEmail", emailOrPhoneInput.getText().toString());
+            editor.putString("Contact", emailOrPhoneInput.getText().toString());
             editor.commit();
             Intent homepage = new Intent(this, Homepage.class);
             startActivity(homepage);
