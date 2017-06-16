@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Intent homepage = new Intent(this, Homepage.class);
             startActivity(homepage);
+            Utils.makeToast(this, "Welcome, " + pref.getString("Name", ""));
         }
     }
 
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             editor.commit();
             Intent homepage = new Intent(this, Homepage.class);
             startActivity(homepage);
+            Utils.makeToast(this, "Welcome, " + pref.getString("Name", ""));
         }
     }
 

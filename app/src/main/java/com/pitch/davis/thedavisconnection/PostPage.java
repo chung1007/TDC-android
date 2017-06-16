@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,6 +31,7 @@ import java.io.File;
 public class PostPage extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     ImageView image;
+    String imagePath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +58,7 @@ public class PostPage extends AppCompatActivity {
             image.setImageBitmap(imageBitmap);
         }
     }
+
     public void postClicked(View view){
         SharedPreferences pref = getApplicationContext().getSharedPreferences("LoginInfo", MODE_PRIVATE);
         EditText locationInput = (EditText)findViewById(R.id.location);
@@ -63,12 +66,14 @@ public class PostPage extends AppCompatActivity {
         String location = locationInput.getText().toString();
         String message = messageInput.getText().toString();
         String currentTime = Utils.getCurrentTimeStamp();
+        Utils.imageUpload(image, pref.getString("Name", ""), currentTime);
         Constants.ref.child(currentTime).child("Location").setValue(location);
         Constants.ref.child(currentTime).child("Message").setValue(message);
         Constants.ref.child(currentTime).child("Name").setValue(pref.getString("Name", ""));
         Constants.ref.child(currentTime).child("Contact").setValue(pref.getString("Contact", ""));
         Utils.makeToast(this, "Posted");
-        finish();
+        Intent goBack = new Intent(this, Homepage.class);
+        startActivity(goBack);
 
     }
 

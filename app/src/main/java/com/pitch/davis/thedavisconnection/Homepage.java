@@ -16,7 +16,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by sam on 6/15/17.
@@ -24,26 +34,33 @@ import android.widget.Toast;
 
 public class Homepage extends AppCompatActivity {
 
+    ListView postList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homepage);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        postList = (ListView)findViewById(R.id.postList);
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
         Intent intent = getIntent();
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("LoginInfo", MODE_PRIVATE);
-        Utils.makeToast(this, "Welcome, " + pref.getString("Name", ""));
         isStoragePermissionGranted();
+        updatePostList();
     }
 
     public void postClicked(View view){
         Intent postPage = new Intent(this, PostPage.class);
         startActivity(postPage);
     }
+
+    public void updatePostList(){
+        Timer timer = new Timer();
+        timer.schedule(new updateList(), 0, 30000);
+    }
+
     public  boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -52,13 +69,12 @@ public class Homepage extends AppCompatActivity {
                 Utils.startFirebaseListener();
                 return true;
             } else {
-
                 Log.e("Permission","Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 return false;
             }
         }
-        else { //permission is automatically granted on sdk<23 upon installation
+        else {
             Log.e("Permission","Permission is granted");
             return true;
         }
@@ -68,8 +84,24 @@ public class Homepage extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
             Log.e("Permission","Permission: "+permissions[0]+ "was "+grantResults[0]);
-            //resume tasks needing this permission
             Utils.startFirebaseListener();
         }
     }
+    public class updateList extends TimerTask {
+
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getFiles());
+                    postList.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+
+        }
+
+    }
+
+
 }
