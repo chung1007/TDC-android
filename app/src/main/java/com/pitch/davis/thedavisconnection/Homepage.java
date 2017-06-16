@@ -58,7 +58,7 @@ public class Homepage extends AppCompatActivity {
 
     public void updatePostList(){
         Timer timer = new Timer();
-        timer.schedule(new updateList(), 0, 30000);
+        timer.schedule(new updateList(), 0, 5000);
     }
 
     public  boolean isStoragePermissionGranted() {
@@ -93,9 +93,14 @@ public class Homepage extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    int index = postList.getFirstVisiblePosition();
+                    View v = postList.getChildAt(0);
+                    int top = (v == null) ? 0 : v.getTop();
                     PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getFiles());
                     postList.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+                    postList.setSelectionFromTop(index, top);
+
                 }
             });
 
