@@ -1,13 +1,24 @@
 package com.pitch.davis.thedavisconnection;
 
 import android.content.Context;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.StorageReference;
+
 import org.w3c.dom.Text;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -19,10 +30,12 @@ public class CustomPostBox extends RelativeLayout {
     private TextView postMessage;
     private ImageView postImage;
     private TextView contact;
+    Context context;
 
 
     public CustomPostBox(Context context, ArrayList<Object> postInfo) {
         super(context);
+        this.context = context;
         init();
         setInfo(postInfo);
 
@@ -52,5 +65,10 @@ public class CustomPostBox extends RelativeLayout {
         this.Name.setText(postInfo.get(2).toString());
         this.postMessage.setText(postInfo.get(3).toString());
         this.contact.setText(postInfo.get(4).toString());
+        StorageReference ref = Constants.storageRef.child(postInfo.get(2).toString()).child(postInfo.get(0).toString());
+        Glide.with(context)
+                .using(new FirebaseImageLoader())
+                .load(ref)
+                .into(postImage);
+        }
     }
-}

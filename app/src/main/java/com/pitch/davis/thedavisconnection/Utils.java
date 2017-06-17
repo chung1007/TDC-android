@@ -142,8 +142,12 @@ public class Utils {
     public static List<String> getFiles(){
         File [] files = Constants.posts.listFiles();
         List<String> fileNames = new ArrayList<>();
-        for (int i = 0; i < files.length; i++) {
-            fileNames.add(files[i].getName());
+        try {
+            for (int i = 0; i < files.length; i++) {
+                fileNames.add(files[i].getName());
+            }
+        }catch (NullPointerException npe){
+            Log.e("NO", "FILES");
         }
         Collections.reverse(fileNames);
         return fileNames;
@@ -169,9 +173,5 @@ public class Utils {
         }
         return dataOfFile;
     }
-    public static Object[] reverse(Object[] arr) {
-        List<Object> list = Arrays.asList(arr);
-        Collections.reverse(list);
-        return list.toArray();
-    }
+
 }

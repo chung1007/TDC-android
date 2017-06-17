@@ -58,7 +58,7 @@ public class Homepage extends AppCompatActivity {
 
     public void updatePostList(){
         Timer timer = new Timer();
-        timer.schedule(new updateList(), 0, 5000);
+        timer.schedule(new updateList(), 0, 30000);
     }
 
     public  boolean isStoragePermissionGranted() {
