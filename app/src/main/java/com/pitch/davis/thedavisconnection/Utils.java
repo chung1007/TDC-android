@@ -125,7 +125,7 @@ public class Utils {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] data = baos.toByteArray();
 
-        UploadTask uploadTask = Constants.storageRef.child(Name).child(timestamp).putBytes(data);
+        UploadTask uploadTask = Constants.storageRef.child(Name + "_" + timestamp).putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {

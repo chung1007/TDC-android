@@ -9,8 +9,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
@@ -18,6 +16,7 @@ import com.google.firebase.storage.StorageReference;
 import org.w3c.dom.Text;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -28,7 +27,7 @@ public class CustomPostBox extends RelativeLayout {
     private TextView location;
     private TextView Name;
     private TextView postMessage;
-    private ImageView postImage;
+    private ImageView eye;
     private TextView contact;
     Context context;
 
@@ -58,17 +57,30 @@ public class CustomPostBox extends RelativeLayout {
         this.Name = (TextView)findViewById(R.id.Name);
         this.postMessage = (TextView)findViewById(R.id.postMessage);
         this.contact = (TextView)findViewById(R.id.contact);
-        this.postImage = (ImageView)findViewById(R.id.picturePost);
+        this.eye = (ImageView)findViewById(R.id.eyeIcon);
     }
-    private void setInfo(ArrayList<Object> postInfo){
+    private void setInfo(ArrayList<Object> postInfo) {
         this.location.setText(postInfo.get(1).toString());
         this.Name.setText(postInfo.get(2).toString());
         this.postMessage.setText(postInfo.get(3).toString());
         this.contact.setText(postInfo.get(4).toString());
-        StorageReference ref = Constants.storageRef.child(postInfo.get(2).toString()).child(postInfo.get(0).toString());
-        Glide.with(context)
-                .using(new FirebaseImageLoader())
-                .load(ref)
-                .into(postImage);
-        }
+        Log.e("timestamp", postInfo.get(0).toString());
+        checkImageExistance(postInfo.get(2).toString(), postInfo.get(0).toString(), eye );
     }
+    private void checkImageExistance(String Name, String timeStamp, final ImageView eye){
+        StorageReference storageRef = Constants.storage.getReference();
+        storageRef.child(Name + "_" + timeStamp).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Got the download URL for 'users/me/profile.png'
+                Log.e("IMAGE", "SUCCESS");
+                eye.setAlpha(1f);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.e("FAILED", "TO GET IMAGE");
+            }
+        });
+    }
+}

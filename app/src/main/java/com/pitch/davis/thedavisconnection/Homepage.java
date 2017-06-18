@@ -48,7 +48,16 @@ public class Homepage extends AppCompatActivity {
         );
         Intent intent = getIntent();
         isStoragePermissionGranted();
+        immediateUpdate();
         updatePostList();
+    }
+
+    //TODO clickable toast for next posts and go to the top.
+
+    public void immediateUpdate(){
+        PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getFiles());
+        postList.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     public void postClicked(View view){

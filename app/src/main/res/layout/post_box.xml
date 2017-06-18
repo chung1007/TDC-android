@@ -24,10 +24,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="location"
-            android:paddingLeft="20dp"
+            android:paddingLeft="15dp"
             android:paddingBottom="5dp"
             android:layout_toRightOf="@id/locationIcon"
-            android:textSize="20sp"
+            android:textSize="17sp"
             android:textColor="#000000"
             android:layout_centerVertical="true"/>
 
@@ -47,13 +47,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/picturePost"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:src="@drawable/profileicon"
-            android:paddingTop="5dp"
-            android:paddingLeft="20dp"/>
 
         <TextView
             android:id="@+id/Name"
@@ -62,23 +55,31 @@
             android:text="Matthew Parker"
             android:textStyle="bold"
             android:textColor="#000000"
-            android:layout_toRightOf="@id/picturePost"
-            android:paddingTop="20dp"
+            android:paddingTop="10dp"
             android:paddingLeft="20dp"
-            android:paddingBottom="5dp"/>
+            android:paddingBottom="10dp"/>
 
         <TextView
             android:id="@+id/postMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="3"
+            android:maxLines="4"
             android:layout_below="@id/Name"
-            android:layout_toRightOf="@id/picturePost"
             android:text="I found some very useful information on what could possibly be our platform for the project. Have you heard of Arduino before? There is something called an Arduino Uno which is a micro controller board that is used for heart rate monitoring  and can be used with something called a BLUELINK SILVER Bluetooth module for data transmission. I just thought it was very interesting and hoped that maybe it could be of use to us. "
             android:paddingLeft="20dp"
             android:ellipsize="end"
-            android:paddingRight="20dp"
+            android:paddingRight="30dp"
             android:textColor="#000000"/>
+
+        <ImageView
+            android:id="@+id/eyeIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:paddingTop="5dp"
+            android:src="@drawable/eye"
+            android:alpha="0"/>
 
     </RelativeLayout>
 
@@ -86,12 +87,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
-        android:paddingLeft="30dp">
+        android:paddingLeft="20dp">
         <TextView
             android:id="@+id/contactTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Contact:   "
+            android:text="Contact:  "
             android:textColor="#000000"/>
 
         <TextView
