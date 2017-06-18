@@ -55,7 +55,7 @@ public class Homepage extends AppCompatActivity {
     //TODO clickable toast for next posts and go to the top.
 
     public void immediateUpdate(){
-        PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getFiles());
+        PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getFiles(), Homepage.this);
         postList.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -105,7 +105,7 @@ public class Homepage extends AppCompatActivity {
                     int index = postList.getFirstVisiblePosition();
                     View v = postList.getChildAt(0);
                     int top = (v == null) ? 0 : v.getTop();
-                    PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getFiles());
+                    PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getFiles(), Homepage.this);
                     postList.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                     postList.setSelectionFromTop(index, top);

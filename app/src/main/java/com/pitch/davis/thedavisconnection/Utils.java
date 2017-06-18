@@ -1,5 +1,6 @@
 package com.pitch.davis.thedavisconnection;
 
+import android.app.Activity;
 import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,10 +11,14 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;

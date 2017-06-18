@@ -1,5 +1,6 @@
 package com.pitch.davis.thedavisconnection;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -28,10 +29,12 @@ public class PostListAdapter extends BaseAdapter{
 
     Context context;
     List <String> fileNames;
-    public PostListAdapter(Context context, List<String> files) {
+    Activity activity;
+    public PostListAdapter(Context context, List<String> files, Activity activity) {
         super();
         this.context = context;
         this.fileNames = files;
+        this.activity = activity;
 
     }
     @Override
@@ -58,7 +61,7 @@ public class PostListAdapter extends BaseAdapter{
             JSONObject JObject = new JSONObject(Utils.readFile(Constants.posts.getAbsolutePath() + "/" + fileNames.get(position)));
             ArrayList<Object> postData = new ArrayList<>(Arrays.asList(JObject.get("timeStamp"), JObject.get("Location")
             , JObject.get("Name"), JObject.get("Message"), JObject.get("Contact")));
-            view = new CustomPostBox(context, postData);
+            view = new CustomPostBox(context, postData, activity);
             convertView = view;
         }catch (JSONException JE){
             Log.e("JSON EXCEPTION", "while converting file to JSON");

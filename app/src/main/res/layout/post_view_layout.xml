@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:paddingBottom="10dp"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:id="@+id/Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Matthew Parker"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:paddingTop="15dp"
+        android:paddingLeft="20dp"/>
+
+    <View
+        android:id="@+id/Border"
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:background="#838383"
+        android:layout_below="@+id/Name"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
+
+    <RelativeLayout
+        android:id="@+id/locationSection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Border"
+        android:paddingTop="10dp">
+
+        <ImageView
+            android:id="@+id/locationIcon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/location"
+            android:layout_centerVertical="true"
+            android:paddingLeft="20dp"
+            android:paddingBottom="5dp" />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="location"
+            android:paddingLeft="10dp"
+            android:paddingBottom="5dp"
+            android:layout_toRightOf="@id/locationIcon"
+            android:textSize="15sp"
+            android:textColor="#8D8C8C"
+            android:layout_centerVertical="true"/>
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/postMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/locationSection"
+        android:text="I found some very useful information on what could possibly be our platform for the project. Have you heard of Arduino before? There is something called an Arduino Uno which is a micro controller board that is used for heart rate monitoring  and can be used with something called a BLUELINK SILVER Bluetooth module for data transmission. I just thought it was very interesting and hoped that maybe it could be of use to us. "
+        android:paddingLeft="20dp"
+        android:ellipsize="end"
+        android:paddingRight="30dp"
+        android:textColor="#000000"
+        android:paddingTop="10dp"/>
+
+
+</RelativeLayout>
