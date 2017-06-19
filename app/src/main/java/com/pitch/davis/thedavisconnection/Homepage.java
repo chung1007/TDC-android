@@ -1,5 +1,6 @@
 package com.pitch.davis.thedavisconnection;
 
+import android.app.Service;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -25,7 +26,6 @@ import java.util.TimerTask;
 
 public class Homepage extends AppCompatActivity {
 
-    public static Boolean halt = true;
     ListView postList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +57,9 @@ public class Homepage extends AppCompatActivity {
     }
 
     public void updatePostList(){
-        if(!halt) {
-            Timer timer = new Timer();
-            timer.schedule(new updateList(), 0, 30000);
-        }
+        Timer timer = new Timer();
+        timer.schedule(new updateList(), 0, 5000);
+
     }
 
     public  boolean isStoragePermissionGranted() {
@@ -90,6 +89,7 @@ public class Homepage extends AppCompatActivity {
         }
     }
 
+
     public void setSearchBarListener() {
         final EditText searchBar = (EditText)findViewById(R.id.searchBar);
         setSearchBarClickListener(searchBar);
@@ -100,12 +100,10 @@ public class Homepage extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (searchBar.getText().toString().equals("")) {
                     searchBar.setCursorVisible(false);
-                    halt = false;
                     immediateUpdate();
                 } else {
                     searchBar.setCursorVisible(true);
-                    String s  = searchBar.getText().toString();
-                    halt = true;
+                    String s = searchBar.getText().toString();
                     postList.setAdapter(null);
                     PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getSortedFiles(s), Homepage.this);
                     postList.setAdapter(adapter);
@@ -123,14 +121,16 @@ public class Homepage extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    int index = postList.getFirstVisiblePosition();
-                    View v = postList.getChildAt(0);
-                    int top = (v == null) ? 0 : v.getTop();
-                    PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getFiles(), Homepage.this);
-                    postList.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-                    postList.setSelectionFromTop(index, top);
-
+                    EditText searchBar = (EditText) findViewById(R.id.searchBar);
+                    if (searchBar.getText().toString().equals("")) {
+                        int index = postList.getFirstVisiblePosition();
+                        View v = postList.getChildAt(0);
+                        int top = (v == null) ? 0 : v.getTop();
+                        PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getFiles(), Homepage.this);
+                        postList.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                        postList.setSelectionFromTop(index, top);
+                    }
                 }
             });
 
@@ -147,5 +147,17 @@ public class Homepage extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    public void onStop(){
+        Log.e("The App", "Has Been Stopped");
+        Intent i = new Intent(this, BackgroundService.class);
+        startService(i);
+        super.onStop();
+    }
+    @Override
+    public void onResume(){
+        immediateUpdate();
+        updatePostList();
+        super.onResume();
+    }
 }

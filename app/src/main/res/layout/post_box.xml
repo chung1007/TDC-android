@@ -78,7 +78,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="30dp"
             android:paddingTop="5dp"
-            android:src="@drawable/eye"
+            android:src="@drawable/eye5"
             android:alpha="0"/>
 
     </RelativeLayout>

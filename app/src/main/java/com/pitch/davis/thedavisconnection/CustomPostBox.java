@@ -103,10 +103,7 @@ public class CustomPostBox extends RelativeLayout {
         postMessage.addOnLayoutChangeListener(new OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-                Log.e("TEST", Name.getText().toString());
-                Log.e("LINES", postMessage.getLineCount() + "");
                 if (postMessage.getLineCount() == 4) {
-                    Log.e(Name.getText().toString(), "has 4 line message!");
                     readMore.setAlpha(1f);
                     readMore.setOnClickListener(new OnClickListener() {
                         @Override
