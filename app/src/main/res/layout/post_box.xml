@@ -34,8 +34,8 @@
         <View
             android:id="@+id/Border"
             android:layout_width="fill_parent"
-            android:layout_height="1.5dp"
-            android:background="#D9D9D9"
+            android:layout_height="0.5dp"
+            android:background="#959796"
             android:layout_below="@+id/location"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="30dp"/>
@@ -55,7 +55,7 @@
             android:text="Matthew Parker"
             android:textStyle="bold"
             android:textColor="#000000"
-            android:paddingTop="10dp"
+            android:paddingTop="5dp"
             android:paddingLeft="20dp"
             android:paddingBottom="10dp"/>
 
@@ -93,7 +93,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Contact:  "
-            android:textColor="#000000"/>
+            android:textColor="#000000"
+            android:fontFamily="sans-serif-condensed"/>
 
         <TextView
             android:id="@+id/contact"
@@ -101,7 +102,7 @@
             android:layout_height="wrap_content"
             android:text="m.parker@gmail.com"
             android:layout_toRightOf="@id/contactTitle"
-            android:textColor="#000000"/>
+            android:textColor="#0D3D56"/>
 
         <TextView
             android:id="@+id/readMore"
