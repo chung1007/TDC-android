@@ -1,30 +1,21 @@
 package com.pitch.davis.thedavisconnection;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ListAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,6 +25,7 @@ import java.util.TimerTask;
 
 public class Homepage extends AppCompatActivity {
 
+    public static Boolean halt = true;
     ListView postList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +42,8 @@ public class Homepage extends AppCompatActivity {
         isStoragePermissionGranted();
         immediateUpdate();
         updatePostList();
+        setSearchBarListener();
     }
-
-    //TODO clickable toast for next posts and go to the top.
 
     public void immediateUpdate(){
         PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getFiles(), Homepage.this);
@@ -66,8 +57,10 @@ public class Homepage extends AppCompatActivity {
     }
 
     public void updatePostList(){
-        Timer timer = new Timer();
-        timer.schedule(new updateList(), 0, 30000);
+        if(!halt) {
+            Timer timer = new Timer();
+            timer.schedule(new updateList(), 0, 30000);
+        }
     }
 
     public  boolean isStoragePermissionGranted() {
@@ -84,7 +77,7 @@ public class Homepage extends AppCompatActivity {
             }
         }
         else {
-            Log.e("Permission","Permission is granted");
+            Log.e("Permission", "Permission is granted");
             return true;
         }
     }
@@ -96,6 +89,34 @@ public class Homepage extends AppCompatActivity {
             Utils.startFirebaseListener();
         }
     }
+
+    public void setSearchBarListener() {
+        final EditText searchBar = (EditText)findViewById(R.id.searchBar);
+        setSearchBarClickListener(searchBar);
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (searchBar.getText().toString().equals("")) {
+                    searchBar.setCursorVisible(false);
+                    halt = false;
+                    immediateUpdate();
+                } else {
+                    searchBar.setCursorVisible(true);
+                    String s  = searchBar.getText().toString();
+                    halt = true;
+                    postList.setAdapter(null);
+                    PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getSortedFiles(s), Homepage.this);
+                    postList.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+    }
+
     public class updateList extends TimerTask {
 
         public void run() {
@@ -115,6 +136,15 @@ public class Homepage extends AppCompatActivity {
 
         }
 
+    }
+    public void setSearchBarClickListener(final EditText searchBar){
+        searchBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                searchBar.setCursorVisible(true);
+                return false;
+            }
+        });
     }
 
 
