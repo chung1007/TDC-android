@@ -1,6 +1,5 @@
 package com.pitch.davis.thedavisconnection;
 
-import android.app.Service;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -58,7 +57,7 @@ public class Homepage extends AppCompatActivity {
 
     public void updatePostList(){
         Timer timer = new Timer();
-        timer.schedule(new updateList(), 0, 5000);
+        timer.schedule(new updateList(), 0, 30000);
 
     }
 
@@ -67,7 +66,7 @@ public class Homepage extends AppCompatActivity {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 Log.e("Permission", "Permission is granted");
-                Utils.startFirebaseListener();
+                startService();
                 return true;
             } else {
                 Log.e("Permission","Permission is revoked");
@@ -84,18 +83,18 @@ public class Homepage extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
-            Log.e("Permission","Permission: "+permissions[0]+ "was "+grantResults[0]);
-            Utils.startFirebaseListener();
+            Log.e("Permission", "Permission: " + permissions[0] + "was " + grantResults[0]);
+            startService();
         }
     }
-
-
     public void setSearchBarListener() {
         final EditText searchBar = (EditText)findViewById(R.id.searchBar);
         setSearchBarClickListener(searchBar);
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (searchBar.getText().toString().equals("")) {
@@ -110,8 +109,10 @@ public class Homepage extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                 }
             }
+
             @Override
-            public void afterTextChanged(Editable editable) {}
+            public void afterTextChanged(Editable editable) {
+            }
         });
     }
 
@@ -147,15 +148,21 @@ public class Homepage extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onStop(){
-        Log.e("The App", "Has Been Stopped");
+    public void startService(){
         Intent i = new Intent(this, BackgroundService.class);
+        BackgroundService.runOnBackground = false;
         startService(i);
-        super.onStop();
     }
+
+    @Override
+    public void onPause(){
+        BackgroundService.runOnBackground = true;
+        super.onPause();
+    }
+
     @Override
     public void onResume(){
+        BackgroundService.runOnBackground = false;
         immediateUpdate();
         updatePostList();
         super.onResume();

@@ -27,6 +27,9 @@
         <service
             android:enabled="true"
             android:name="com.pitch.davis.thedavisconnection.BackgroundService">
+        <intent-filter>
+            <action android:name="STOP"/>
+        </intent-filter>
         </service>
     </application>
 

@@ -67,60 +67,6 @@ public class Utils {
         String currDate = new SimpleDateFormat("MM-dd-yyyy-HH:mm:ss").format(new Date());
         return currDate;
     }
-    public static void startFirebaseListener(){
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                Constants.ref.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        final String timeStamp = dataSnapshot.getKey();
-                        File myFile = new File(Constants.posts.getAbsolutePath() + "/" + timeStamp);
-                        if (!myFile.exists()) {
-                            Constants.ref.child(timeStamp).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    Log.e("data", dataSnapshot.toString());
-                                    try {
-                                        JSONObject postData = new JSONObject();
-                                        postData.put("timeStamp", timeStamp);
-                                        for (DataSnapshot data2 : dataSnapshot.getChildren()) {
-                                            postData.put(data2.getKey(), data2.getValue().toString());
-                                        }
-                                        writeToSDcardFile(timeStamp, postData);
-                                    }catch (JSONException JE){
-                                        Log.e("JSON", "EXCEPTION");
-                                    }
-                                }
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                            }
-                        });
-                    }
-                }
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {}
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {}
-                });
-            }
-        });
-    }
-
-    private static void writeToSDcardFile(String fileName, JSONObject Object) {
-        try {
-            Constants.posts.mkdir();
-            PrintWriter file = new PrintWriter(new FileOutputStream(new File(Constants.posts, (fileName))));
-            file.println(Object);
-            file.close();
-        }catch (IOException IOE){
-            Log.e("IO", "EXCEPTION");
-        }
-    }
 
     public static void imageUpload(ImageView imageView, String Name, String timestamp){
         imageView.setDrawingCacheEnabled(true);
@@ -134,16 +80,15 @@ public class Utils {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
             }
         });
     }
+
     public static List<String> getFiles(){
         File [] files = Constants.posts.listFiles();
         List<String> fileNames = new ArrayList<>();
@@ -157,6 +102,7 @@ public class Utils {
         Collections.reverse(fileNames);
         return fileNames;
     }
+
     public static List<String> getSortedFiles(String search){
         List<String> files = Utils.getFiles();
         List<String> sortedFiles = new ArrayList<>();
@@ -174,6 +120,7 @@ public class Utils {
         Log.e("sortedFiles", files.toString());
         return sortedFiles;
     }
+
     public static String readFile(String name) {
         BufferedReader file;
         try {

@@ -1,12 +1,11 @@
 package com.pitch.davis.thedavisconnection;
 
-import android.app.IntentService;
-import android.app.Notification;
+
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.v7.app.NotificationCompat;
@@ -25,44 +24,45 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 /**
  * Created by sam on 6/19/17.
  */
 public class BackgroundService extends Service {
     private static IBinder mBinder;
     private static boolean mAllowRebind;
+    public static volatile boolean runOnBackground = true;
+    int badgeCount = 0;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         startFirebaseEventListener();
         return START_STICKY;
     }
+
     @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
+    public IBinder onBind(Intent intent) {return null;}
     @Override
-    public boolean onUnbind(Intent intent) {
-        return mAllowRebind;
-    }
+    public boolean onUnbind(Intent intent) {return false;}
     @Override
     public void onRebind(Intent intent) {}
     @Override
-    public void onDestroy() {stopSelf();}
+    public void onDestroy() {
+        super.onDestroy();
 
+    }
 
     public void startFirebaseEventListener(){
         Constants.ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.e("Firebase","something was added!");
                 final String timeStamp = dataSnapshot.getKey();
                 File myFile = new File(Constants.posts.getAbsolutePath() + "/" + timeStamp);
                 if (!myFile.exists()) {
                     Constants.ref.child(timeStamp).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            Log.e("data", dataSnapshot.toString());
                             try {
                                 JSONObject postData = new JSONObject();
                                 postData.put("timeStamp", timeStamp);
@@ -70,7 +70,10 @@ public class BackgroundService extends Service {
                                     postData.put(data2.getKey(), data2.getValue().toString());
                                 }
                                 writeToSDcardFile(timeStamp, postData);
-                                makeNotification();
+                                if(runOnBackground) {
+                                    makeNotification(postData.getString("Message"));
+                                }
+                                Log.e("notification", "made");
                             } catch (JSONException JE) {
                                 Log.e("JSON", "EXCEPTION");
                             }
@@ -104,20 +107,24 @@ public class BackgroundService extends Service {
         }
     }
 
-    private void makeNotification(){
+    private void makeNotification(String message){
         NotificationManager mNotificationManager =
                 (NotificationManager)this. getSystemService(Context.NOTIFICATION_SERVICE);
         int notifyID = 1;
         android.support.v4.app.NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle("TITLE")
-                .setContentText("MESSAGE")
+                .setContentTitle("New Post!")
+                .setContentText(message)
                 .setSmallIcon(R.drawable.eye5);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        mNotifyBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(
                 notifyID,
                 mNotifyBuilder.build());
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(400);
+        v.vibrate(500);
+
+        ShortcutBadger.applyCount(getApplicationContext(), ++badgeCount);
 
     }
-
 }

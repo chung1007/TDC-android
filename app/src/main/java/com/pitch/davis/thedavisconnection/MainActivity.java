@@ -1,5 +1,7 @@
 package com.pitch.davis.thedavisconnection;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -19,6 +21,8 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class MainActivity extends AppCompatActivity {
     SharedPreferences pref;
@@ -71,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUp(){
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
+        removeNotifications();
         nameInput = (EditText)findViewById(R.id.nameInput);
         emailOrPhoneInput = (EditText)findViewById(R.id.phoneNumberInput);
         nameInput.setFocusable(false);
@@ -89,4 +94,12 @@ public class MainActivity extends AppCompatActivity {
         myAnim.setFillAfter(true);
         title.startAnimation(myAnim);
     }
+
+    private void removeNotifications(){
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        ShortcutBadger.removeCount(this);
+        notificationManager.cancelAll();
+    }
+
+
 }
