@@ -23,6 +23,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by sam on 6/15/17.
@@ -41,7 +43,7 @@ public class PostPage extends AppCompatActivity {
         image = (ImageView)findViewById(R.id.postImage);
         actionBar.hide();
         Intent intent = getIntent();
-        dispatchTakePictureIntent();
+        BackgroundService.runOnBackground = false;
     }
 
     private void dispatchTakePictureIntent() {
@@ -49,6 +51,10 @@ public class PostPage extends AppCompatActivity {
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
+    }
+
+    public void camClicked(View view){
+        dispatchTakePictureIntent();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -60,21 +66,32 @@ public class PostPage extends AppCompatActivity {
     }
 
     public void postClicked(View view){
+        EditText locationInput = (EditText) findViewById(R.id.location);
+        EditText messageInput = (EditText) findViewById(R.id.postMessage);
+        EditText titleInput = (EditText)findViewById(R.id.postTitle);
         SharedPreferences pref = getApplicationContext().getSharedPreferences("LoginInfo", MODE_PRIVATE);
-        EditText locationInput = (EditText)findViewById(R.id.location);
-        EditText messageInput = (EditText)findViewById(R.id.postMessage);
         String location = locationInput.getText().toString();
         String message = messageInput.getText().toString();
-        String currentTime = Utils.getCurrentTimeStamp();
-        Utils.imageUpload(image, pref.getString("Name", ""), currentTime);
-        Constants.ref.child(currentTime).child("Location").setValue(location);
-        Constants.ref.child(currentTime).child("Message").setValue(message);
-        Constants.ref.child(currentTime).child("Name").setValue(pref.getString("Name", ""));
-        Constants.ref.child(currentTime).child("Contact").setValue(pref.getString("Contact", ""));
-        Utils.makeToast(this, "Posted");
-        Intent goBack = new Intent(this, Homepage.class);
-        startActivity(goBack);
+        String postTitle = titleInput.getText().toString();
+        if(location.equals("") || message.equals("") || postTitle.equals("")) {
+            Utils.makeToast(this, "Incomplete!");
+        }else {
+            String currentTime = Utils.getCurrentTimeStamp();
+            Integer integer = (Integer) image.getTag();
+            if(image.getDrawable() != null) {
+                Utils.imageUpload(image, pref.getString("Name", ""), currentTime);
+            }
+            Constants.ref.child(currentTime).child("Location").setValue(location);
+            Constants.ref.child(currentTime).child("Message").setValue(message);
+            Constants.ref.child(currentTime).child("Title").setValue(postTitle);
+            Constants.ref.child(currentTime).child("Name").setValue(pref.getString("Name", ""));
+            Constants.ref.child(currentTime).child("Contact").setValue(pref.getString("Contact", ""));
+            Utils.makeToast(this, "Posted");
+            Intent goBack = new Intent(this, Homepage.class);
+            startActivity(goBack);
+            }
+        }
 
     }
 
-}
+

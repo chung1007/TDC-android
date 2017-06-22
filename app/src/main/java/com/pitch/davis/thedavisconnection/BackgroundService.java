@@ -1,14 +1,18 @@
 package com.pitch.davis.thedavisconnection;
 
 
+import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
@@ -23,6 +27,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import me.leolin.shortcutbadger.ShortcutBadger;
 
@@ -30,8 +35,6 @@ import me.leolin.shortcutbadger.ShortcutBadger;
  * Created by sam on 6/19/17.
  */
 public class BackgroundService extends Service {
-    private static IBinder mBinder;
-    private static boolean mAllowRebind;
     public static volatile boolean runOnBackground = true;
     int badgeCount = 0;
 
@@ -71,25 +74,34 @@ public class BackgroundService extends Service {
                                 }
                                 writeToSDcardFile(timeStamp, postData);
                                 if(runOnBackground) {
-                                    makeNotification(postData.getString("Message"));
+                                    Log.e("App", " is not opened!");
+                                    Log.e("postData", postData.toString());
+                                    makeNotification(postData.getString("Message"), postData.getString("Title"));
                                 }
-                                Log.e("notification", "made");
                             } catch (JSONException JE) {
                                 Log.e("JSON", "EXCEPTION");
                             }
                         }
+
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
                         }
                     });
                 }
             }
+
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
@@ -107,12 +119,13 @@ public class BackgroundService extends Service {
         }
     }
 
-    private void makeNotification(String message){
+    private void makeNotification(String message, String Title){
+        Log.e("Notification", "made");
         NotificationManager mNotificationManager =
-                (NotificationManager)this. getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         int notifyID = 1;
         android.support.v4.app.NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle("New Post!")
+                .setContentTitle(Title)
                 .setContentText(message)
                 .setSmallIcon(R.drawable.eye5);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
@@ -127,4 +140,5 @@ public class BackgroundService extends Service {
         ShortcutBadger.applyCount(getApplicationContext(), ++badgeCount);
 
     }
+
 }
