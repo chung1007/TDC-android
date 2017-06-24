@@ -68,25 +68,24 @@ public class Utils {
         return currDate;
     }
 
-    public static void imageUpload(ImageView imageView, String Name, String timestamp){
-        imageView.setDrawingCacheEnabled(true);
-        imageView.buildDrawingCache();
-        Bitmap bitmap = imageView.getDrawingCache();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] data = baos.toByteArray();
-
-        UploadTask uploadTask = Constants.storageRef.child(Name + "_" + timestamp).putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-            }
-        });
+    public static void imageUpload(String imagePath, String timeStamp, String name){
+        try {
+            InputStream stream = new FileInputStream(new File(imagePath));
+            UploadTask uploadTask = Constants.storageRef.child(name + "_" + timeStamp).putStream(stream);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Log.e("Pic Upload", "FAILED");
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Log.e("Pic Upload", "SUCCESS!");
+                }
+            });
+        }catch (FileNotFoundException FILE){
+            Log.e("File", "NOT FOUND");
+        }
     }
 
     public static List<String> getFiles(){

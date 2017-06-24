@@ -86,7 +86,8 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:paddingLeft="20dp"
-            android:paddingTop="5dp"/>
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
 
         <EditText
             android:id="@+id/postTitle"
@@ -179,7 +180,6 @@
         android:paddingRight="20dp"
         android:paddingBottom="10dp"
         android:background="#FFFFFF"
-        android:maxLines="4"
         android:textSize="15sp"
         android:gravity="top|left"
         android:layout_below="@id/relativeLayout"/>

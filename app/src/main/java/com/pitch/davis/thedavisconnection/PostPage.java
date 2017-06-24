@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,12 +20,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -32,15 +41,14 @@ import java.util.Arrays;
 
 public class PostPage extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    ImageView image;
-    String imagePath;
+    public static volatile String timeStamp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.postpage);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ActionBar actionBar = getSupportActionBar();
-        image = (ImageView)findViewById(R.id.postImage);
+        timeStamp = Utils.getCurrentTimeStamp();
         actionBar.hide();
         Intent intent = getIntent();
         BackgroundService.runOnBackground = false;
@@ -59,9 +67,20 @@ public class PostPage extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            ImageView image = (ImageView)findViewById(R.id.postImage);
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             image.setImageBitmap(imageBitmap);
+            String[] projection = { MediaStore.Images.Media.DATA };
+            Cursor cursor = managedQuery(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    projection, null, null, null);
+            int column_index_data = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToLast();
+            String imagePath = cursor.getString(column_index_data);
+            String name = MainActivity.pref.getString("Name", "");
+            Utils.imageUpload(imagePath, timeStamp, name);
         }
     }
 
@@ -76,16 +95,11 @@ public class PostPage extends AppCompatActivity {
         if(location.equals("") || message.equals("") || postTitle.equals("")) {
             Utils.makeToast(this, "Incomplete!");
         }else {
-            String currentTime = Utils.getCurrentTimeStamp();
-            Integer integer = (Integer) image.getTag();
-            if(image.getDrawable() != null) {
-                Utils.imageUpload(image, pref.getString("Name", ""), currentTime);
-            }
-            Constants.ref.child(currentTime).child("Location").setValue(location);
-            Constants.ref.child(currentTime).child("Message").setValue(message);
-            Constants.ref.child(currentTime).child("Title").setValue(postTitle);
-            Constants.ref.child(currentTime).child("Name").setValue(pref.getString("Name", ""));
-            Constants.ref.child(currentTime).child("Contact").setValue(pref.getString("Contact", ""));
+            Constants.ref.child(timeStamp).child("Location").setValue(location);
+            Constants.ref.child(timeStamp).child("Message").setValue(message);
+            Constants.ref.child(timeStamp).child("Title").setValue(postTitle);
+            Constants.ref.child(timeStamp).child("Name").setValue(pref.getString("Name", ""));
+            Constants.ref.child(timeStamp).child("Contact").setValue(pref.getString("Contact", ""));
             Utils.makeToast(this, "Posted");
             Intent goBack = new Intent(this, Homepage.class);
             startActivity(goBack);

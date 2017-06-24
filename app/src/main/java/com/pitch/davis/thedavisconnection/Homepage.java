@@ -167,4 +167,8 @@ public class Homepage extends AppCompatActivity {
         updatePostList();
         super.onResume();
     }
+    @Override
+    public void onBackPressed(){
+        finishAffinity();
+    }
 }

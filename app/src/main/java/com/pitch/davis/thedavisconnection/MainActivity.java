@@ -25,7 +25,7 @@ import android.widget.Toast;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 public class MainActivity extends AppCompatActivity {
-    SharedPreferences pref;
+    public static SharedPreferences pref;
     SharedPreferences.Editor editor;
     EditText nameInput;
     EditText emailOrPhoneInput;
