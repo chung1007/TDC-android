@@ -1,0 +1,69 @@
+
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/Sale"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="Sale"
+                android:textSize="10sp"
+                android:layout_weight="1"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/Announcement"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="Announcement"
+                android:textAllCaps="false"
+                android:layout_weight="1"
+                android:textSize="10sp"/>
+
+            <Button
+                android:id="@+id/Report"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="Report"
+                android:textAllCaps="false"
+                android:layout_weight="1"
+                android:textSize="10sp"/>
+
+            <Button
+                android:id="@+id/lostAndFound"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="Lost &amp; Found"
+                android:textAllCaps="false"
+                android:layout_weight="1"
+                android:textSize="10sp"/>
+
+            <Button
+                android:id="@+id/Misc"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="Misc."
+                android:textAllCaps="false"
+                android:layout_weight="1"
+                android:textSize="10sp"/>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+</RelativeLayout>
