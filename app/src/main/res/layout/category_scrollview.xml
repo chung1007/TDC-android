@@ -24,7 +24,8 @@
                 android:text="Sale"
                 android:textSize="10sp"
                 android:layout_weight="1"
-                android:textAllCaps="false"/>
+                android:textAllCaps="false"
+                android:alpha="0.3"/>
 
             <Button
                 android:id="@+id/Announcement"
@@ -33,7 +34,8 @@
                 android:text="Announcement"
                 android:textAllCaps="false"
                 android:layout_weight="1"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                android:alpha="0.3"/>
 
             <Button
                 android:id="@+id/Report"
@@ -42,7 +44,8 @@
                 android:text="Report"
                 android:textAllCaps="false"
                 android:layout_weight="1"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                android:alpha="0.3"/>
 
             <Button
                 android:id="@+id/lostAndFound"
@@ -51,7 +54,8 @@
                 android:text="Lost &amp; Found"
                 android:textAllCaps="false"
                 android:layout_weight="1"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                android:alpha="0.3"/>
 
             <Button
                 android:id="@+id/Misc"
@@ -60,7 +64,8 @@
                 android:text="Misc."
                 android:textAllCaps="false"
                 android:layout_weight="1"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                android:alpha="0.3"/>
 
         </LinearLayout>
 

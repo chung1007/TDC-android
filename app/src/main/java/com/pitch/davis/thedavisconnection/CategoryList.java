@@ -35,9 +35,7 @@ public class CategoryList extends RelativeLayout {
         report = (Button)findViewById(R.id.Report);
         lostAndFound = (Button)findViewById(R.id.lostAndFound);
         misc = (Button)findViewById(R.id.Misc);
-
-
-        //setOnClickListener();
+        setOnClickListener();
 
     }
 
@@ -48,7 +46,7 @@ public class CategoryList extends RelativeLayout {
                 @Override
                 public void onClick(View v) {
                     for (int i = 0; i < ((LinearLayout) v.getParent()).getChildCount(); i++) {
-                        ((Button) ((LinearLayout) v.getParent()).getChildAt(i)).setAlpha(0.5f);
+                        ((Button) ((LinearLayout) v.getParent()).getChildAt(i)).setAlpha(0.3f);
                     }
                     ((Button) v).setAlpha(1f);
                 }
