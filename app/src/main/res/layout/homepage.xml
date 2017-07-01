@@ -27,6 +27,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:id="@+id/searchLayout"
         android:background="#F7F7F7">
 
         <ImageView
@@ -66,6 +67,52 @@
 
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/filterLayout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#F7F7F7"
+        android:gravity="center_vertical"
+        android:paddingLeft="25dp">
+
+        <TextView
+            android:id="@+id/saleFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sale"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/announceFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Announcement"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/reportFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Report"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/lostAndFoundFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lost &amp; Found"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/miscFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Misc."
+            android:fontFamily="sans-serif-condensed"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
 
     <View
         android:id="@+id/TextUnderBorder"

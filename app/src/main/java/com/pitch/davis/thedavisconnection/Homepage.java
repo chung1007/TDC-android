@@ -3,6 +3,7 @@ package com.pitch.davis.thedavisconnection;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -14,8 +15,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,6 +32,7 @@ import java.util.TimerTask;
 public class Homepage extends AppCompatActivity {
 
     ListView postList;
+    boolean isFiltered = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +49,7 @@ public class Homepage extends AppCompatActivity {
         immediateUpdate();
         updatePostList();
         setSearchBarListener();
+        setFilterListener();
     }
 
     public void immediateUpdate(){
@@ -104,7 +112,7 @@ public class Homepage extends AppCompatActivity {
                     searchBar.setCursorVisible(true);
                     String s = searchBar.getText().toString();
                     postList.setAdapter(null);
-                    PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getSortedFiles(s), Homepage.this);
+                    PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getSortedFiles("SEARCH", s), Homepage.this);
                     postList.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
@@ -115,6 +123,34 @@ public class Homepage extends AppCompatActivity {
             }
         });
     }
+    public void setFilterListener(){
+        LinearLayout LLayout = (LinearLayout)findViewById(R.id.filterLayout);
+        int childCount = LLayout.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            final TextView filter = (TextView) LLayout.getChildAt(i);
+            filter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    postList.setAdapter(null);
+                    PostListAdapter adapter = new PostListAdapter(getApplicationContext(), Utils.getSortedFiles("FILTER", filter.getText().toString()), Homepage.this);
+                    postList.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    if(((TextView) v).getCurrentTextColor() == Color.BLACK){
+                        ((TextView) v).setTextColor(Color.parseColor("#808080"));
+                        immediateUpdate();
+                        isFiltered = false;
+
+                    }else {
+                        for (int i = 0; i < ((LinearLayout) v.getParent()).getChildCount(); i++) {
+                            ((TextView) ((LinearLayout) v.getParent()).getChildAt(i)).setTextColor(Color.parseColor("#808080"));
+                        }
+                        ((TextView) v).setTextColor(Color.parseColor("#000000"));
+                        isFiltered = true;
+                    }
+                }
+            });
+        }
+    }
 
     public class updateList extends TimerTask {
 
@@ -123,7 +159,7 @@ public class Homepage extends AppCompatActivity {
                 @Override
                 public void run() {
                     EditText searchBar = (EditText) findViewById(R.id.searchBar);
-                    if (searchBar.getText().toString().equals("")) {
+                    if (searchBar.getText().toString().equals("") && !isFiltered) {
                         int index = postList.getFirstVisiblePosition();
                         View v = postList.getChildAt(0);
                         int top = (v == null) ? 0 : v.getTop();

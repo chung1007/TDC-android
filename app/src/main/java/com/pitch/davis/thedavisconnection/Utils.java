@@ -102,14 +102,21 @@ public class Utils {
         return fileNames;
     }
 
-    public static List<String> getSortedFiles(String search){
+    public static List<String> getSortedFiles(String type, String search){
         List<String> files = Utils.getFiles();
         List<String> sortedFiles = new ArrayList<>();
         for (int i = 0; i < files.size(); i++){
             try {
-                JSONObject JObject = new JSONObject(Utils.readFile(Constants.posts.getAbsolutePath() + "/" + files.get(i)));
-                if(JObject.getString("Message").toLowerCase().contains(search.toLowerCase()) || JObject.getString("Name").toLowerCase().contains(search.toLowerCase())){
+                if (type.equals("SEARCH")){
+                    JSONObject JObject = new JSONObject(Utils.readFile(Constants.posts.getAbsolutePath() + "/" + files.get(i)));
+                if (JObject.getString("Message").toLowerCase().contains(search.toLowerCase()) || JObject.getString("Name").toLowerCase().contains(search.toLowerCase())) {
                     sortedFiles.add(files.get(i));
+                    }
+                }else if(type.equals("FILTER")){
+                    JSONObject JObject = new JSONObject(Utils.readFile(Constants.posts.getAbsolutePath() + "/" + files.get(i)));
+                    if (JObject.getString("Category").equals(search)) {
+                        sortedFiles.add(files.get(i));
+                    }
                 }
             }catch (JSONException JE){
                 Log.e("JSON", "EXCEPTION");

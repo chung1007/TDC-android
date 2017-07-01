@@ -16,8 +16,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -100,11 +103,25 @@ public class PostPage extends AppCompatActivity {
             Constants.ref.child(timeStamp).child("Title").setValue(postTitle);
             Constants.ref.child(timeStamp).child("Name").setValue(pref.getString("Name", ""));
             Constants.ref.child(timeStamp).child("Contact").setValue(pref.getString("Contact", ""));
+            getCategory();
             Utils.makeToast(this, "Posted");
             Intent goBack = new Intent(this, Homepage.class);
             startActivity(goBack);
             }
         }
+
+    public void getCategory(){
+        RelativeLayout RLayout = (RelativeLayout)findViewById(R.id.categoryLayout);
+        LinearLayout LLayout = (LinearLayout)RLayout.findViewById(R.id.container);
+        int childCount = LLayout.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            Button category = (Button) LLayout.getChildAt(i);
+            if (category.getAlpha() == 1f){
+                Constants.ref.child(timeStamp).child("Category").setValue(category.getText().toString());
+            }
+        }
+    }
+
 
     }
 
