@@ -195,6 +195,11 @@ public class Homepage extends AppCompatActivity {
         BackgroundService.runOnBackground = true;
         super.onPause();
     }
+    @Override
+    public void onStop(){
+        BackgroundService.runOnBackground = true;
+        super.onStop();
+    }
 
     @Override
     public void onResume(){

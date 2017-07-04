@@ -52,6 +52,7 @@ public class BackgroundService extends Service {
     public void onRebind(Intent intent) {}
     @Override
     public void onDestroy() {
+        runOnBackground = false;
         super.onDestroy();
 
     }
@@ -96,6 +97,10 @@ public class BackgroundService extends Service {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.e("Post", "REMOVED!");
+                final String timeStamp = dataSnapshot.getKey();
+                File myFile = new File(Constants.posts.getAbsolutePath() + "/" + timeStamp);
+                myFile.delete();
             }
 
             @Override

@@ -54,7 +54,6 @@ public class PostPage extends AppCompatActivity {
         timeStamp = Utils.getCurrentTimeStamp();
         actionBar.hide();
         Intent intent = getIntent();
-        BackgroundService.runOnBackground = false;
     }
 
     private void dispatchTakePictureIntent() {

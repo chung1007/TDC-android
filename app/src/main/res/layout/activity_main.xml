@@ -95,7 +95,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="By P.I.T.C.H."
+        android:text="By PITCH"
         android:textStyle="italic"
         android:paddingBottom="5dp"
         android:textColor="#FFFFFF"
