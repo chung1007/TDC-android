@@ -2,6 +2,7 @@ package com.pitch.davis.thedavisconnection;
 
 
 import android.app.ActivityManager;
+import android.app.KeyguardManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -68,7 +69,7 @@ public class BackgroundService extends Service {
                                     postData.put(data2.getKey(), data2.getValue().toString());
                                 }
                                 writeToSDcardFile(timeStamp, postData);
-                                if(runOnBackground) {
+                                if(shouldShowNotification(getApplicationContext())) {
                                     Log.e("App", " is not opened!");
                                     Log.e("postData", postData.toString());
                                     makeNotification(postData.getString("Message"), postData.getString("Title"));
@@ -139,5 +140,16 @@ public class BackgroundService extends Service {
         ShortcutBadger.applyCount(getApplicationContext(), ++badgeCount);
 
     }
+    static boolean shouldShowNotification(Context context) {
+        ActivityManager.RunningAppProcessInfo myProcess = new ActivityManager.RunningAppProcessInfo();
+        ActivityManager.getMyMemoryState(myProcess);
+        if (myProcess.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND)
+            return true;
+
+        KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        // app is in foreground, but if screen is locked show notification anyway
+        return km.inKeyguardRestrictedInputMode();
+    }
+
 
 }
