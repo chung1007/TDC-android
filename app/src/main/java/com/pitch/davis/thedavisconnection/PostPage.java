@@ -1,6 +1,7 @@
 package com.pitch.davis.thedavisconnection;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -15,11 +16,17 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListPopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -53,7 +60,9 @@ public class PostPage extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         timeStamp = Utils.getCurrentTimeStamp();
         actionBar.hide();
+        setCategoryList();
         Intent intent = getIntent();
+        BackgroundService.runOnBackground = false;
     }
 
     private void dispatchTakePictureIntent() {
@@ -90,11 +99,13 @@ public class PostPage extends AppCompatActivity {
         EditText locationInput = (EditText) findViewById(R.id.location);
         EditText messageInput = (EditText) findViewById(R.id.postMessage);
         EditText titleInput = (EditText)findViewById(R.id.postTitle);
+        AutoCompleteTextView category = (AutoCompleteTextView)findViewById(R.id.categoryList);
         SharedPreferences pref = getApplicationContext().getSharedPreferences("LoginInfo", MODE_PRIVATE);
         String location = locationInput.getText().toString();
         String message = messageInput.getText().toString();
         String postTitle = titleInput.getText().toString();
-        if(location.equals("") || message.equals("") || postTitle.equals("")) {
+        String categoryChosen = category.getText().toString();
+        if(location.equals("") || message.equals("") || postTitle.equals("") || categoryChosen.equals("Options..")) {
             Utils.makeToast(this, "Incomplete!");
         }else {
             Constants.ref.child(timeStamp).child("Location").setValue(location);
@@ -102,14 +113,14 @@ public class PostPage extends AppCompatActivity {
             Constants.ref.child(timeStamp).child("Title").setValue(postTitle);
             Constants.ref.child(timeStamp).child("Name").setValue(pref.getString("Name", ""));
             Constants.ref.child(timeStamp).child("Contact").setValue(pref.getString("Contact", ""));
-            getCategory();
+            Constants.ref.child(timeStamp).child("Category").setValue(categoryChosen);
             Utils.makeToast(this, "Posted");
             Intent goBack = new Intent(this, Homepage.class);
             startActivity(goBack);
             }
         }
 
-    public void getCategory(){
+   /* public void getCategory(){
         RelativeLayout RLayout = (RelativeLayout)findViewById(R.id.categoryLayout);
         LinearLayout LLayout = (LinearLayout)RLayout.findViewById(R.id.container);
         int childCount = LLayout.getChildCount();
@@ -119,9 +130,44 @@ public class PostPage extends AppCompatActivity {
                 Constants.ref.child(timeStamp).child("Category").setValue(category.getText().toString());
             }
         }
+    }*/
+
+    public void setCategoryList() {
+        final AutoCompleteTextView category = (AutoCompleteTextView)findViewById(R.id.categoryList);
+        final String[] list= new String[]{"Sale", "Announcement", "Report", "Lost & Found", "Misc."};
+        final ListPopupWindow lpw = new ListPopupWindow(this);
+        lpw.setAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, list));
+        lpw.setAnchorView(category);
+        lpw.setModal(true);
+        lpw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                String item = list[position];
+                category.setText(item);
+                lpw.dismiss();
+            }
+        });
+        category.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                final InputMethodManager imm = (InputMethodManager) PostPage.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                lpw.show();
+                return true;
+            }
+        });
+        category.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                final InputMethodManager imm = (InputMethodManager) PostPage.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                lpw.show();
+            }
+        });
     }
 
-
-    }
+}
 
 

@@ -16,10 +16,10 @@
             android:text="TheDavisConnection"
             android:textColor="#FFFFFF"
             android:layout_centerInParent="true"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:fontFamily="sans-serif-condensed"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"/>
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"/>
 
     </RelativeLayout>
 
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/header"
         android:paddingTop="10dp"
-        android:background="#D8F0EF">
+        android:background="#F1F2F3">
 
         <TextView
             android:id="@+id/title"
@@ -37,8 +37,8 @@
             android:layout_height="wrap_content"
             android:text="Your Post"
             android:fontFamily="sans-serif-condensed"
-            android:textSize="20sp"
             android:textStyle="bold"
+            android:textSize="20sp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:textColor="#000000"/>
@@ -54,6 +54,13 @@
             android:layout_centerVertical="true"
             android:clickable="true"
             android:onClick="camClicked"/>
+
+        <View
+            android:id="@+id/darkBorder"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#C1C3C3"
+            android:layout_below="@id/camButton"/>
 
     </RelativeLayout>
 
@@ -75,13 +82,14 @@
             android:id="@+id/postTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Write a title..."
+            android:hint="Write a title"
             android:paddingTop="10dp"
             android:paddingLeft="20dp"
             android:textSize="15sp"
             android:background="@null"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/postImage"
+            android:maxLines="1"
             android:singleLine="true"/>
 
         <View
@@ -124,6 +132,17 @@
             android:layout_marginLeft="10dp"
             android:background="#C1C3C3"/>
 
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:id="@+id/categoryList"
+            android:layout_toRightOf="@id/categoryHeading"
+            android:hint="Options.."
+            android:textSize="13sp"
+            android:background="@null"
+            android:editable="false"/>
+<!--
         <com.pitch.davis.thedavisconnection.CategoryList
             android:id="@+id/categoryList"
             android:layout_width="match_parent"
@@ -131,6 +150,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:layout_toEndOf="@+id/categoryHeading"/>
+            -->
 
 
     </RelativeLayout>
@@ -153,7 +173,7 @@
             android:id="@+id/locationIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/location"
+            android:src="@drawable/location1"
             android:layout_centerVertical="true"
             android:paddingLeft="10dp" />
 
@@ -161,7 +181,8 @@
             android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Add location"
+            android:hint="Event location"
+            android:maxLines="1"
             android:paddingLeft="10dp"
             android:layout_toRightOf="@id/locationIcon"
             android:textSize="15sp"
@@ -195,7 +216,7 @@
         android:id="@+id/postMessage"
         android:layout_width="match_parent"
         android:layout_height="160dp"
-        android:hint="Write your message..."
+        android:hint="Write your message"
         android:paddingTop="20dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"

@@ -35,7 +35,7 @@
             android:id="@+id/locationIcon"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:src="@drawable/location"
+            android:src="@drawable/location1"
             android:layout_centerVertical="true"
             android:paddingLeft="20dp"
             android:paddingBottom="5dp" />

@@ -14,7 +14,7 @@
            android:id="@+id/locationIcon"
            android:layout_width="35dp"
            android:layout_height="35dp"
-           android:src="@drawable/location"
+           android:src="@drawable/location1"
            android:layout_centerVertical="true"
            android:paddingLeft="20dp"
            android:paddingBottom="5dp" />
@@ -75,11 +75,11 @@
 
         <ImageView
             android:id="@+id/eyeIcon"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="25dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="30dp"
-            android:paddingTop="5dp"
             android:src="@drawable/eye5"
             android:alpha="0"/>
 

@@ -50,12 +50,6 @@ public class BackgroundService extends Service {
     public boolean onUnbind(Intent intent) {return false;}
     @Override
     public void onRebind(Intent intent) {}
-    @Override
-    public void onDestroy() {
-        runOnBackground = false;
-        super.onDestroy();
-
-    }
 
     public void startFirebaseEventListener(){
         Constants.ref.addChildEventListener(new ChildEventListener() {
