@@ -1,6 +1,8 @@
 package com.pitch.davis.thedavisconnection;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,8 +17,13 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,7 +71,7 @@ public class Utils {
         toast.show();
     }
     public static String getCurrentTimeStamp(){
-        String currDate = new SimpleDateFormat("MM-dd-yyyy-HH:mm:ss").format(new Date());
+        String currDate = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(new Date());
         return currDate;
     }
 
@@ -147,6 +154,22 @@ public class Utils {
             return null;
         }
         return dataOfFile;
+    }
+
+    public static Dialog dialogCreater(Context context, LinearLayout parent, String url){
+        AlertDialog.Builder adb = new AlertDialog.Builder(context);
+        Dialog d = adb.setView(new View(context)).create();
+        d.setContentView(parent);
+        WebView mWebView = (WebView) parent.findViewById(R.id.webView);
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return false;
+            }
+        });
+        mWebView.loadUrl(url);
+        return d;
     }
 
 }

@@ -1,5 +1,8 @@
 package com.pitch.davis.thedavisconnection;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -12,15 +15,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,6 +40,7 @@ public class Homepage extends AppCompatActivity {
 
     ListView postList;
     boolean isFiltered = false;
+    private float x1,x2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +58,7 @@ public class Homepage extends AppCompatActivity {
         updatePostList();
         setSearchBarListener();
         setFilterListener();
+
     }
 
     public void immediateUpdate(){
@@ -69,7 +78,7 @@ public class Homepage extends AppCompatActivity {
 
     }
 
-    public  boolean isStoragePermissionGranted() {
+    public boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
@@ -186,24 +195,11 @@ public class Homepage extends AppCompatActivity {
 
     public void startService(){
         Intent i = new Intent(this, BackgroundService.class);
-        BackgroundService.runOnBackground = false;
         startService(i);
     }
 
     @Override
-    public void onPause(){
-        BackgroundService.runOnBackground = true;
-        super.onPause();
-    }
-    @Override
-    public void onStop(){
-        BackgroundService.runOnBackground = true;
-        super.onStop();
-    }
-
-    @Override
     public void onResume(){
-        BackgroundService.runOnBackground = false;
         immediateUpdate();
         updatePostList();
         super.onResume();

@@ -36,7 +36,6 @@ import me.leolin.shortcutbadger.ShortcutBadger;
  * Created by sam on 6/19/17.
  */
 public class BackgroundService extends Service {
-    public static volatile boolean runOnBackground = true;
     int badgeCount = 0;
 
     @Override

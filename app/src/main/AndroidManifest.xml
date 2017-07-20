@@ -9,7 +9,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/appicon2"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -26,7 +26,8 @@
         </activity>
         <service
             android:enabled="true"
-            android:name="com.pitch.davis.thedavisconnection.BackgroundService">
+            android:name="com.pitch.davis.thedavisconnection.BackgroundService"
+            android:launchMode="singleTop">
         <intent-filter>
             <action android:name="STOP"/>
         </intent-filter>

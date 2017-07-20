@@ -62,7 +62,6 @@ public class PostPage extends AppCompatActivity {
         actionBar.hide();
         setCategoryList();
         Intent intent = getIntent();
-        BackgroundService.runOnBackground = false;
     }
 
     private void dispatchTakePictureIntent() {

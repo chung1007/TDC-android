@@ -19,4 +19,5 @@ public class Constants {
     public static FirebaseStorage storage = FirebaseStorage.getInstance();
     public static StorageReference storageRef = storage.getReferenceFromUrl("gs://thedavisconnection-92e9e.appspot.com");
     public static File posts = new File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/TDC/");
+    static final int MIN_DISTANCE = 150;
 }
