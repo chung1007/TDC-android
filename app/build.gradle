@@ -1,6 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
+
+    signingConfigs {
+        config {
+            keyAlias 'keyalias'
+            keyPassword 'Sam1007'
+            storeFile file('/Users/sam/.android/debug.keystore')
+            storePassword 'android'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
 
@@ -8,8 +17,8 @@ android {
         applicationId "com.pitch.davis.thedavisconnection"
         minSdkVersion 18
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         multiDexEnabled true
 
     }
