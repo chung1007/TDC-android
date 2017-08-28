@@ -126,7 +126,7 @@ public class BackgroundService extends Service {
         android.support.v4.app.NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(this)
                 .setContentTitle(Title)
                 .setContentText(message)
-                .setSmallIcon(R.drawable.eye5);
+                .setSmallIcon(R.drawable.appicon2);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         mNotifyBuilder.setContentIntent(contentIntent);

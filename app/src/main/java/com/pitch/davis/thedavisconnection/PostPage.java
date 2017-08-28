@@ -1,6 +1,7 @@
 package com.pitch.davis.thedavisconnection;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,8 +30,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -38,9 +43,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,16 +61,40 @@ import java.util.Arrays;
 public class PostPage extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     public static volatile String timeStamp;
+    EditText locationInput;
+    EditText messageInput;
+    EditText titleInput;
+    TextView deletePost;
+    AutoCompleteTextView category;
+    ImageView imagePreview;
+    Boolean editing = false;
+    String editingFileName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.postpage);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        locationInput = (EditText) findViewById(R.id.location);
+        messageInput = (EditText) findViewById(R.id.postMessage);
+        titleInput = (EditText)findViewById(R.id.postTitle);
+        category = (AutoCompleteTextView)findViewById(R.id.categoryList);
+        imagePreview = (ImageView)findViewById(R.id.postImage);
+        deletePost = (TextView)findViewById(R.id.deleteButton);
         ActionBar actionBar = getSupportActionBar();
         timeStamp = Utils.getCurrentTimeStamp();
         actionBar.hide();
         setCategoryList();
         Intent intent = getIntent();
+        editingFileName = intent.getStringExtra("file");
+        try {
+            if (!editingFileName.equals("")) {
+                deletePost.setAlpha(1f);
+                editing = true;
+                setArchiceInfo(editingFileName);
+            }
+        }catch (NullPointerException npe){
+                editing = false;
+        }
     }
 
     private void dispatchTakePictureIntent() {
@@ -104,6 +137,9 @@ public class PostPage extends AppCompatActivity {
         String message = messageInput.getText().toString();
         String postTitle = titleInput.getText().toString();
         String categoryChosen = category.getText().toString();
+        if(editing){
+            Constants.ref.child(editingFileName).setValue(null);
+        }
         if(location.equals("") || message.equals("") || postTitle.equals("") || categoryChosen.equals("Options..")) {
             Utils.makeToast(this, "Incomplete!");
         }else {
@@ -118,6 +154,13 @@ public class PostPage extends AppCompatActivity {
             startActivity(goBack);
             }
         }
+    public void deleteClicked(View view){
+        if(editing){
+            Constants.ref.child(editingFileName).setValue(null);
+            Intent goBack = new Intent(this, ArchivePage.class);
+            startActivity(goBack);
+        }
+    }
 
    /* public void getCategory(){
         RelativeLayout RLayout = (RelativeLayout)findViewById(R.id.categoryLayout);
@@ -130,6 +173,23 @@ public class PostPage extends AppCompatActivity {
             }
         }
     }*/
+
+    public void setArchiceInfo(String fileName){
+        try{
+            JSONObject JObject = new JSONObject(Utils.readFile(Constants.posts.getAbsolutePath() + "/" + fileName));
+            titleInput.setText(JObject.getString("Title"));
+            category.setText(JObject.getString("Category"));
+            locationInput.setText(JObject.getString("Location"));
+            messageInput.setText(JObject.getString("Message"));
+            StorageReference ref = Constants.storageRef.child(MainActivity.pref.getString("Name", "") + "_" + fileName);
+            Glide.with(this)
+                    .using(new FirebaseImageLoader())
+                    .load(ref)
+                    .into(imagePreview);
+        }catch (JSONException JE){
+            Log.e("JSON ERROR ", "SOMETHING WENT WRONG");
+        }
+    }
 
     public void setCategoryList() {
         final AutoCompleteTextView category = (AutoCompleteTextView)findViewById(R.id.categoryList);

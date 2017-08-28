@@ -3,6 +3,7 @@ package com.pitch.davis.thedavisconnection;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
@@ -28,8 +29,9 @@ public class CustomPostBox extends RelativeLayout {
     private TextView Name;
     private TextView postMessage;
     private TextView readMore;
-    private ImageView eye;
     private TextView contact;
+    private ImageView eye;
+    private ImageView edit;
     private Activity activity;
     private ArrayList<Object> postInfo;
     Context context;
@@ -64,6 +66,7 @@ public class CustomPostBox extends RelativeLayout {
         this.contact = (TextView)findViewById(R.id.contact);
         this.eye = (ImageView)findViewById(R.id.eyeIcon);
         this.readMore = (TextView)findViewById(R.id.readMore);
+        this.edit = (ImageView)findViewById(R.id.editicon);
     }
     private void setInfo() {
         this.location.setText(postInfo.get(1).toString());
@@ -74,6 +77,10 @@ public class CustomPostBox extends RelativeLayout {
         checkImageExistance(postInfo.get(2).toString(), postInfo.get(0).toString(), eye);
         checkMessageLength();
         setEyeClickListener(postInfo.get(2).toString() + "_" + postInfo.get(0).toString());
+        setEditClickListener();
+        if(Utils.getCurrentActivity(context).equals("com.pitch.davis.thedavisconnection.ArchivePage")){
+            edit.setAlpha(1f);
+        }
     }
     private void checkImageExistance(String Name, String timeStamp, final ImageView eye){
         StorageReference storageRef = Constants.storage.getReference();
@@ -126,7 +133,7 @@ public class CustomPostBox extends RelativeLayout {
         eye.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (eye.getAlpha() == 1f){
+                if (eye.getAlpha() == 1f) {
                     StorageReference ref = Constants.storageRef.child(fileName);
                     final Dialog dialog = new Dialog(activity, R.style.FullHeightDialog);
                     dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -142,6 +149,26 @@ public class CustomPostBox extends RelativeLayout {
                     window.setGravity(Gravity.CENTER);
                     dialog.setCanceledOnTouchOutside(true);
                     dialog.show();
+                }
+            }
+        });
+    }
+
+    private void setEditClickListener(){
+        edit.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(edit.getAlpha() == 1f){
+                    String message = postMessage.getText().toString();
+                    Log.e("MESSAGE", message);
+                    String name = Name.getText().toString();
+                    Log.e("NAME", name);
+                    String fileData = Utils.getSpecificFile(message, name);
+                    Log.e("intent fileData", fileData);
+                    Intent i = new Intent(context, PostPage.class);
+                    i.putExtra("file", fileData);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(i);
                 }
             }
         });

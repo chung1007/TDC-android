@@ -240,9 +240,9 @@
     <TextView
         android:id="@+id/postButton"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="52dp"
         android:layout_alignParentRight="true"
-        android:background="@drawable/rounded_textbox"
+        android:background="#D8F0EF"
         android:layout_above="@+id/space2"
         android:text="POST"
         android:textColor="#147370"
@@ -252,6 +252,22 @@
         android:layout_centerHorizontal="true"
         android:clickable="true"
         android:onClick="postClicked"/>
+
+    <TextView
+        android:id="@+id/deleteButton"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="#FB9B8F"
+        android:layout_above="@+id/postButton"
+        android:text="DELETE"
+        android:textColor="#951505"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:alpha="0"
+        android:onClick="deleteClicked"/>
 
     <View
         android:id="@+id/space2"

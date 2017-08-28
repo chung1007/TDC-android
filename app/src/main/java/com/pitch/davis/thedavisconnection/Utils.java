@@ -1,9 +1,11 @@
 package com.pitch.davis.thedavisconnection;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -95,12 +97,37 @@ public class Utils {
         }
     }
 
+    public static void checkPostExistance(){
+        File [] files = Constants.posts.listFiles();
+        for (File file : files) {
+            if(!file.getName().equals("")) {
+                final String key = file.getName();
+                Constants.ref.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        try {
+                            Log.e("snapshot key", dataSnapshot.getValue().toString());
+                        }catch (NullPointerException NPE){
+                            File myFile = new File(Constants.posts.getAbsolutePath() + "/" + key);
+                            myFile.delete();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
+            }
+        }
+
+    }
+
     public static List<String> getFiles(){
         File [] files = Constants.posts.listFiles();
         List<String> fileNames = new ArrayList<>();
         try {
             for (int i = 0; i < files.length; i++) {
-                fileNames.add(files[i].getName());
+                if(!files[i].getName().equals("")) {
+                    fileNames.add(files[i].getName());
+                }
             }
         }catch (NullPointerException npe){
             Log.e("NO", "FILES");
@@ -124,14 +151,36 @@ public class Utils {
                     if (JObject.getString("Category").equals(search)) {
                         sortedFiles.add(files.get(i));
                     }
+                }else if(type.equals("ARCHIVE")) {
+                    JSONObject JObject = new JSONObject(Utils.readFile(Constants.posts.getAbsolutePath() + "/" + files.get(i)));
+                    if (JObject.getString("Name").equals(MainActivity.pref.getString("Name", ""))) {
+                        sortedFiles.add(files.get(i));
+                    }
                 }
             }catch (JSONException JE){
                 Log.e("JSON", "EXCEPTION");
             }
 
         }
-        Log.e("sortedFiles", files.toString());
         return sortedFiles;
+    }
+
+    public static String getSpecificFile(String message, String Name) {
+        List<String> files = Utils.getFiles();
+        String fileName = "";
+        for (int i = 0; i < files.size(); i++) {
+            try {
+                JSONObject JObject = new JSONObject(Utils.readFile(Constants.posts.getAbsolutePath() + "/" + files.get(i)));
+                if (JObject.getString("Message").equals(message)) {
+                    fileName = files.get(i);
+                }
+
+            } catch (JSONException JE) {
+                Log.e("JSON", "EXCEPTION");
+            }
+
+        }
+        return fileName;
     }
 
     public static String readFile(String name) {
@@ -156,20 +205,14 @@ public class Utils {
         return dataOfFile;
     }
 
-    public static Dialog dialogCreater(Context context, LinearLayout parent, String url){
-        AlertDialog.Builder adb = new AlertDialog.Builder(context);
-        Dialog d = adb.setView(new View(context)).create();
-        d.setContentView(parent);
-        WebView mWebView = (WebView) parent.findViewById(R.id.webView);
-        mWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return false;
-            }
-        });
-        mWebView.loadUrl(url);
-        return d;
+    public static String getCurrentActivity(Context context){
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        // get the info from the currently running task
+        List< ActivityManager.RunningTaskInfo > taskInfo = am.getRunningTasks(1);
+
+        ComponentName componentInfo = taskInfo.get(0).topActivity;
+        return taskInfo.get(0).topActivity.getClassName();
     }
+
 
 }

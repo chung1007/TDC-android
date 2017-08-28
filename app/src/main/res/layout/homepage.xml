@@ -1,133 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F1F2F3">
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/appColor">
-        <TextView
-            android:id="@+id/header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TheDavisConnection"
-            android:textColor="#FFFFFF"
-            android:layout_centerInParent="true"
-            android:textSize="30sp"
-            android:fontFamily="sans-serif-condensed"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"/>
-    </RelativeLayout>
-
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:id="@+id/searchLayout"
-        android:background="#F7F7F7">
-
-        <ImageView
-            android:id="@+id/searchIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/searchicon"
-            android:layout_alignParentLeft="true"
-            android:paddingLeft="5dp"
-            android:layout_centerVertical="true"/>
-
-        <EditText
-            android:id="@+id/searchBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:hint="Search"
-            android:layout_toRightOf="@id/searchIcon"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/post"
-            android:singleLine="true"
-            android:cursorVisible="false"/>
-
-        <ImageView
-            android:id="@+id/post"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:clickable="true"
-            android:onClick="postClicked"
-            android:src="@drawable/posticon"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:paddingRight="5dp"/>
-
-
-    </RelativeLayout>
-
     <LinearLayout
-        android:id="@+id/filterLayout"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="#F7F7F7"
-        android:gravity="center_vertical"
-        android:paddingLeft="25dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#F1F2F3">
 
-        <TextView
-            android:id="@+id/saleFilter"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sale"
-            android:fontFamily="sans-serif-condensed"
-            android:layout_weight="1"/>
-        <TextView
-            android:id="@+id/announceFilter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Announcement"
-            android:fontFamily="sans-serif-condensed"
-            android:layout_weight="1"/>
-        <TextView
-            android:id="@+id/reportFilter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Report"
-            android:fontFamily="sans-serif-condensed"
-            android:layout_weight="1"/>
-        <TextView
-            android:id="@+id/lostAndFoundFilter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lost &amp; Found"
-            android:fontFamily="sans-serif-condensed"
-            android:layout_weight="1"/>
-        <TextView
-            android:id="@+id/miscFilter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Misc."
-            android:fontFamily="sans-serif-condensed"
-            android:layout_weight="1"/>
+            android:background="@color/appColor">
+            <TextView
+                android:id="@+id/header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TheDavisConnection"
+                android:textColor="#FFFFFF"
+                android:layout_centerInParent="true"
+                android:textSize="30sp"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"/>
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:id="@+id/searchLayout"
+            android:background="#F7F7F7">
+
+            <ImageView
+                android:id="@+id/searchIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/searchicon"
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="5dp"
+                android:layout_centerVertical="true"/>
+
+            <EditText
+                android:id="@+id/searchBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="Search"
+                android:layout_toRightOf="@id/searchIcon"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/postArchive"
+                android:singleLine="true"
+                android:cursorVisible="false"/>
+
+            <ImageView
+                android:id="@+id/postArchive"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/archive"
+                android:layout_toLeftOf="@+id/post"
+                android:paddingRight="25dp"
+                android:layout_centerVertical="true"
+                android:onClick="archiveClicked"/>
+
+
+            <ImageView
+                android:id="@+id/post"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:clickable="true"
+                android:onClick="postClicked"
+                android:src="@drawable/posticon"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingRight="5dp"/>
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/filterLayout"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="#F7F7F7"
+            android:gravity="center_vertical"
+            android:paddingLeft="25dp">
+
+            <TextView
+                android:id="@+id/saleFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sale"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/announceFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Announcement"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/reportFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Report"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/lostAndFoundFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lost &amp; Found"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/miscFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Misc."
+                android:fontFamily="sans-serif-condensed"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/TextUnderBorder"
+            android:layout_width="fill_parent"
+            android:layout_height="0.5dp"
+            android:background="#E1E1E1"/>
+
+            <ListView
+                android:id="@+id/postList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:divider="@null">
+
+            </ListView>
 
     </LinearLayout>
 
-    <View
-        android:id="@+id/TextUnderBorder"
-        android:layout_width="fill_parent"
-        android:layout_height="0.5dp"
-        android:background="#E1E1E1"/>
 
-        <ListView
-            android:id="@+id/postList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            android:divider="@null">
+   <!-- <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </WebView>
 
-        </ListView>
-</LinearLayout>
+    -->
+    
+</RelativeLayout>
+
+

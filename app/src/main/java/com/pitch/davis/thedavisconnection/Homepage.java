@@ -40,7 +40,6 @@ public class Homepage extends AppCompatActivity {
 
     ListView postList;
     boolean isFiltered = false;
-    private float x1,x2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +53,7 @@ public class Homepage extends AppCompatActivity {
         );
         Intent intent = getIntent();
         isStoragePermissionGranted();
+        Utils.checkPostExistance();
         immediateUpdate();
         updatePostList();
         setSearchBarListener();
@@ -70,6 +70,11 @@ public class Homepage extends AppCompatActivity {
     public void postClicked(View view){
         Intent postPage = new Intent(this, PostPage.class);
         startActivity(postPage);
+    }
+
+    public void archiveClicked(View view){
+        Intent archive = new Intent(this, ArchivePage.class);
+        startActivity(archive);
     }
 
     public void updatePostList(){
