@@ -36,6 +36,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONException;
@@ -95,6 +96,23 @@ public class Utils {
         }catch (FileNotFoundException FILE){
             Log.e("File", "NOT FOUND");
         }
+    }
+
+    public static void deleteFirebaseImage(String path){
+        StorageReference ref = Constants.storageRef.child(path);
+        ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // File deleted successfully
+                Log.e("Image Deletion", "SUCCESS!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Uh-oh, an error occurred!
+                Log.e("Image Deletion", "FAILED");
+            }
+        });
     }
 
     public static void checkPostExistance(){

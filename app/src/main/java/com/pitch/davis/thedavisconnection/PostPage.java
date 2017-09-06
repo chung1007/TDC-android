@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -98,10 +99,20 @@ public class PostPage extends AppCompatActivity {
     }
 
     private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        /*Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
+        }*/
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+        startActivityForResult(chooserIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     public void camClicked(View view){
@@ -109,21 +120,20 @@ public class PostPage extends AppCompatActivity {
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
+            Uri pickedImage = data.getData();
+            String[] filePath = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getContentResolver().query(pickedImage, filePath, null, null, null);
+            cursor.moveToFirst();
+            String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
             ImageView image = (ImageView)findViewById(R.id.postImage);
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            image.setImageBitmap(imageBitmap);
-            String[] projection = { MediaStore.Images.Media.DATA };
-            Cursor cursor = managedQuery(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    projection, null, null, null);
-            int column_index_data = cursor
-                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToLast();
-            String imagePath = cursor.getString(column_index_data);
+            image.setImageBitmap(bitmap);
             String name = MainActivity.pref.getString("Name", "");
             Utils.imageUpload(imagePath, timeStamp, name);
+            cursor.close();
         }
     }
 
@@ -139,6 +149,7 @@ public class PostPage extends AppCompatActivity {
         String categoryChosen = category.getText().toString();
         if(editing){
             Constants.ref.child(editingFileName).setValue(null);
+            Utils.deleteFirebaseImage(pref.getString("Name", "")+"_"+timeStamp);
         }
         if(location.equals("") || message.equals("") || postTitle.equals("") || categoryChosen.equals("Options..")) {
             Utils.makeToast(this, "Incomplete!");
@@ -156,7 +167,9 @@ public class PostPage extends AppCompatActivity {
         }
     public void deleteClicked(View view){
         if(editing){
+            SharedPreferences pref = getApplicationContext().getSharedPreferences("LoginInfo", MODE_PRIVATE);
             Constants.ref.child(editingFileName).setValue(null);
+            Utils.deleteFirebaseImage(pref.getString("Name", "") + "_" + timeStamp);
             Intent goBack = new Intent(this, ArchivePage.class);
             startActivity(goBack);
         }
